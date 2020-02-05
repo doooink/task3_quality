@@ -13,7 +13,7 @@ FROM
       FROM quality
       LEFT JOIN lessons ON quality.lesson_id = lessons.id
       LEFT JOIN tutor_id ON lessons.event_id = tutor_id.event_id
-      WHERE tech_quality IS NOT NULL
+      WHERE tech_quality IS NOT NULL AND lessons.subject = 'phys'
       GROUP BY date_3_UTC, user_id
 	  )
 GROUP BY date_3_UTC
