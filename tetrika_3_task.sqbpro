@@ -1,22 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="C:/Users/Admin/Desktop/тетрика/database.db" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><current_tab id="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="966"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="0"/><expanded_item id="3" parent="0"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><current_table name="lessons"/><default_encoding codec=""/><browse_table_settings/></tab_browse><tab_sql><sql name="SQL 1">WITH tutor_id as (
-         SELECT event_id, user_id, role 
-		 FROM (SELECT DISTINCT * FROM participants) as distinct_participants
-         LEFT JOIN (SELECT DISTINCT * FROM users) as distinct_users 
-         ON distinct_participants.user_id = distinct_users.id
-		 WHERE role = 'tutor')
-
-SELECT date_3_UTC, user_id, MIN(AVG_score) AS min_score_by_day
-FROM
-     (
-	  SELECT  DATE(scheduled_time, '+3 hours') AS date_3_UTC, user_id, 
-      ROUND(AVG(tech_quality), 2) as AVG_score
-      FROM quality
-      LEFT JOIN lessons ON quality.lesson_id = lessons.id
-      LEFT JOIN tutor_id ON lessons.event_id = tutor_id.event_id
-      WHERE tech_quality IS NOT NULL
-      GROUP BY date_3_UTC, user_id
-	  )
-GROUP BY date_3_UTC
-ORDER BY date_3_UTC
-;
-</sql><current_tab id="0"/></tab_sql></sqlb_project>
+WITH tutor_id as (
+         SELECT event_id, user_id, role 
+		 FROM (SELECT DISTINCT * FROM participants) as distinct_participants
+         LEFT JOIN (SELECT DISTINCT * FROM users) as distinct_users 
+         ON distinct_participants.user_id = distinct_users.id
+		 WHERE role = 'tutor')
+
+SELECT date_3_UTC, user_id, MIN(AVG_score) AS min_score_by_day
+FROM
+     (
+	  SELECT  DATE(scheduled_time, '+3 hours') AS date_3_UTC, user_id, 
+      ROUND(AVG(tech_quality), 2) as AVG_score
+      FROM quality
+      LEFT JOIN lessons ON quality.lesson_id = lessons.id
+      LEFT JOIN tutor_id ON lessons.event_id = tutor_id.event_id
+      WHERE tech_quality IS NOT NULL
+      GROUP BY date_3_UTC, user_id
+	  )
+GROUP BY date_3_UTC
+ORDER BY date_3_UTC;
+
